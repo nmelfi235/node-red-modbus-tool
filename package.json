@@ -2,7 +2,13 @@
     "name": "Testbox",
     "description": "A Node-RED Project",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "node-red-contrib-buffer-parser": "3.2.2",
+        "node-red-contrib-modbus": "5.26.0",
+        "node-red-contrib-cron-plus": "2.1.0",
+        "node-red-contrib-string": "1.0.0",
+        "node-red-node-sqlite": "1.1.0"
+    },
     "node-red": {
         "settings": {
             "flowFile": "flows.json",
