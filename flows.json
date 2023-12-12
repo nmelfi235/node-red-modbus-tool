@@ -40,6 +40,14 @@
         "env": []
     },
     {
+        "id": "05b90c81d8e90a14",
+        "type": "tab",
+        "label": "API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "7fde02a3dbacda26",
         "type": "tab",
         "label": "BMS",
@@ -492,11 +500,11 @@
         "serialParity": "none",
         "serialConnectionDelay": "100",
         "serialAsciiResponseStartDelimiter": "0x3A",
-        "unit_id": "10",
-        "commandDelay": "1",
-        "clientTimeout": "10000",
+        "unit_id": 10,
+        "commandDelay": 50,
+        "clientTimeout": 10000,
         "reconnectOnTimeout": true,
-        "reconnectTimeout": "2000",
+        "reconnectTimeout": 2000,
         "parallelUnitIdsAllowed": true
     },
     {
@@ -572,6 +580,35 @@
         "type": "sqlitedb",
         "db": "/data/log.db",
         "mode": "RWC"
+    },
+    {
+        "id": "916070376faeaa7d",
+        "type": "modbus-client",
+        "name": "ContextGateway503",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "10.11.254.251",
+        "tcpPort": "503",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": "10",
+        "commandDelay": "50",
+        "clientTimeout": "10000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": true,
+        "showWarnings": true,
+        "showLogs": true
     },
     {
         "id": "38ada0c8c540ab8f",
@@ -4104,6 +4141,236 @@
         "x": 550,
         "y": 140,
         "wires": []
+    },
+    {
+        "id": "7589dfcff1387d67",
+        "type": "modbus-flex-write",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": true,
+        "showWarnings": true,
+        "server": "916070376faeaa7d",
+        "emptyMsgOnFail": true,
+        "keepMsgProperties": true,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 690,
+        "y": 340,
+        "wires": [
+            [],
+            [
+                "ae8b1efbd33230a2"
+            ]
+        ]
+    },
+    {
+        "id": "d48c02c6892c62f0",
+        "type": "split",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 510,
+        "y": 340,
+        "wires": [
+            [
+                "7589dfcff1387d67"
+            ]
+        ]
+    },
+    {
+        "id": "a9ed739e434c7084",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "Set Discharge",
+        "func": "\nlet millivolts = 48000;\n\nmsg.payload = [\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 356,\n        'value': 0\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 354,\n        'value': 1\n    },\n    {\n        'fc': 16,\n        'quantity': 2,\n        'address': 378,\n        'value': [millivolts >> 16, millivolts & 0xFFFF]\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 511,\n        'value': 50\n    },\n];\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 340,
+        "wires": [
+            [
+                "d48c02c6892c62f0"
+            ]
+        ]
+    },
+    {
+        "id": "6388805920e46c17",
+        "type": "inject",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 340,
+        "wires": [
+            [
+                "a9ed739e434c7084"
+            ]
+        ]
+    },
+    {
+        "id": "c79acbd9b8aa5554",
+        "type": "debug",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "ae8b1efbd33230a2",
+        "type": "join",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 870,
+        "y": 340,
+        "wires": [
+            [
+                "c79acbd9b8aa5554"
+            ]
+        ]
+    },
+    {
+        "id": "ac58a035cd0b1361",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "Set Charge",
+        "func": "\nlet millivolts = 55000;\n\nmsg.payload = [\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 354,\n        'value': 0\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 356,\n        'value': 1\n    },\n    {\n        'fc': 16,\n        'quantity': 2,\n        'address': 378,\n        'value': [millivolts >> 16, millivolts & 0xFFFF]\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 367,\n        'value': 50\n    },\n];\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 400,
+        "wires": [
+            [
+                "d48c02c6892c62f0"
+            ]
+        ]
+    },
+    {
+        "id": "f3b2100d7ac4cfae",
+        "type": "inject",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 400,
+        "wires": [
+            [
+                "ac58a035cd0b1361"
+            ]
+        ]
+    },
+    {
+        "id": "15d0b4b4ecd4a5a6",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "Set Inactive",
+        "func": "\nmsg.payload = [\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 354,\n        'value': 0\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 356,\n        'value': 0\n    },\n];\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 460,
+        "wires": [
+            [
+                "d48c02c6892c62f0"
+            ]
+        ]
+    },
+    {
+        "id": "4800be6fcee2d101",
+        "type": "inject",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 460,
+        "wires": [
+            [
+                "15d0b4b4ecd4a5a6"
+            ]
+        ]
     },
     {
         "id": "1c523af552715ba5",
