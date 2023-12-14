@@ -60,7 +60,7 @@
         "type": "subflow",
         "name": "Error 404 Response",
         "info": "",
-        "category": "",
+        "category": "network",
         "in": [
             {
                 "x": 40,
@@ -82,7 +82,7 @@
         "type": "subflow",
         "name": "Error 500 Response",
         "info": "",
-        "category": "",
+        "category": "network",
         "in": [
             {
                 "x": 40,
@@ -139,7 +139,7 @@
         "type": "subflow",
         "name": "Error 400 Response",
         "info": "",
-        "category": "",
+        "category": "network",
         "in": [
             {
                 "x": 40,
@@ -179,7 +179,7 @@
         "type": "subflow",
         "name": "Parse Sunspec",
         "info": "`msg.buffer` should be set to the modbus read",
-        "category": "",
+        "category": "modbus",
         "in": [
             {
                 "x": 60,
@@ -224,6 +224,92 @@
         ],
         "meta": {},
         "color": "#DDAA99"
+    },
+    {
+        "id": "da1113f849ed321d",
+        "type": "subflow",
+        "name": "Modbus Command",
+        "info": "",
+        "category": "modbus",
+        "in": [
+            {
+                "x": 200,
+                "y": 100,
+                "wires": []
+            }
+        ],
+        "out": [
+            {
+                "x": 640,
+                "y": 100,
+                "wires": []
+            }
+        ],
+        "env": [
+            {
+                "name": "Device",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "select",
+                    "opts": {
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "Inverter (502)"
+                                },
+                                "v": "inv502"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Inverter (503)"
+                                },
+                                "v": "inv503"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "WattNode"
+                                },
+                                "v": "wattnode"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "BMS"
+                                },
+                                "v": "bms"
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "icon": "node-red-contrib-modbus/modbus-icon.png"
+    },
+    {
+        "id": "60b9353837f41409",
+        "type": "subflow",
+        "name": "SSE Server",
+        "info": "",
+        "category": "network",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": []
+            }
+        ],
+        "out": [],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "icon": "node-red/white-globe.svg",
+        "status": {
+            "x": 160,
+            "y": 30,
+            "wires": []
+        }
     },
     {
         "id": "e7875e2de9c03017",
@@ -4625,7 +4711,7 @@
         "y": 300,
         "wires": [
             [
-                "2fe09de62b785db2"
+                "168e27817342d651"
             ]
         ]
     },
@@ -4773,26 +4859,6 @@
         ]
     },
     {
-        "id": "2fe09de62b785db2",
-        "type": "function",
-        "z": "05b90c81d8e90a14",
-        "name": "Check Password",
-        "func": "\nreturn msg;",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 300,
-        "wires": [
-            [
-                "cea7bf18364ed0e8"
-            ],
-            []
-        ]
-    },
-    {
         "id": "f7947477c274e063",
         "type": "switch",
         "z": "05b90c81d8e90a14",
@@ -4893,6 +4959,33 @@
         "x": 120,
         "y": 60,
         "wires": []
+    },
+    {
+        "id": "168e27817342d651",
+        "type": "switch",
+        "z": "05b90c81d8e90a14",
+        "name": "Check Password",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 350,
+        "y": 300,
+        "wires": [
+            [
+                "cea7bf18364ed0e8"
+            ],
+            []
+        ]
     },
     {
         "id": "1c523af552715ba5",
