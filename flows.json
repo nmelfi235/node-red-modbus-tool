@@ -4146,7 +4146,7 @@
         "id": "7589dfcff1387d67",
         "type": "modbus-flex-write",
         "z": "05b90c81d8e90a14",
-        "name": "",
+        "name": "Write to Inverter",
         "showStatusActivities": false,
         "showErrors": true,
         "showWarnings": true,
@@ -4155,8 +4155,8 @@
         "keepMsgProperties": true,
         "delayOnStart": false,
         "startDelayTime": "",
-        "x": 690,
-        "y": 340,
+        "x": 1580,
+        "y": 300,
         "wires": [
             [],
             [
@@ -4168,15 +4168,15 @@
         "id": "d48c02c6892c62f0",
         "type": "split",
         "z": "05b90c81d8e90a14",
-        "name": "",
+        "name": "Split Writes",
         "splt": "\\n",
         "spltType": "str",
         "arraySplt": 1,
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 510,
-        "y": 340,
+        "x": 1390,
+        "y": 300,
         "wires": [
             [
                 "7589dfcff1387d67"
@@ -4194,8 +4194,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
-        "y": 340,
+        "x": 1200,
+        "y": 300,
         "wires": [
             [
                 "d48c02c6892c62f0"
@@ -4203,56 +4203,10 @@
         ]
     },
     {
-        "id": "6388805920e46c17",
-        "type": "inject",
-        "z": "05b90c81d8e90a14",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 160,
-        "y": 340,
-        "wires": [
-            [
-                "a9ed739e434c7084"
-            ]
-        ]
-    },
-    {
-        "id": "c79acbd9b8aa5554",
-        "type": "debug",
-        "z": "05b90c81d8e90a14",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1010,
-        "y": 340,
-        "wires": []
-    },
-    {
         "id": "ae8b1efbd33230a2",
         "type": "join",
         "z": "05b90c81d8e90a14",
-        "name": "",
+        "name": "Join Writes",
         "mode": "auto",
         "build": "object",
         "property": "payload",
@@ -4268,11 +4222,11 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 870,
-        "y": 340,
+        "x": 1770,
+        "y": 300,
         "wires": [
             [
-                "c79acbd9b8aa5554"
+                "848acb8ecd747583"
             ]
         ]
     },
@@ -4281,46 +4235,17 @@
         "type": "function",
         "z": "05b90c81d8e90a14",
         "name": "Set Charge",
-        "func": "\nlet millivolts = 55000;\n\nmsg.payload = [\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 354,\n        'value': 0\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 356,\n        'value': 1\n    },\n    {\n        'fc': 16,\n        'quantity': 2,\n        'address': 378,\n        'value': [millivolts >> 16, millivolts & 0xFFFF]\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 367,\n        'value': 50\n    },\n];\n\nreturn msg;",
+        "func": "\nlet millivolts = 55000;\n\nmsg.payload = [\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 354,\n        'value': 0\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 356,\n        'value': 1\n    },\n    {\n        'fc': 16,\n        'quantity': 2,\n        'address': 378,\n        'value': [millivolts >> 16, millivolts & 0xFFFF]\n    },\n    {\n        'fc': 6,\n        'quantity': 1,\n        'address': 367,\n        'value': 80\n    },\n];\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
-        "y": 400,
+        "x": 1190,
+        "y": 360,
         "wires": [
             [
                 "d48c02c6892c62f0"
-            ]
-        ]
-    },
-    {
-        "id": "f3b2100d7ac4cfae",
-        "type": "inject",
-        "z": "05b90c81d8e90a14",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 160,
-        "y": 400,
-        "wires": [
-            [
-                "ac58a035cd0b1361"
             ]
         ]
     },
@@ -4335,8 +4260,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
-        "y": 460,
+        "x": 1190,
+        "y": 420,
         "wires": [
             [
                 "d48c02c6892c62f0"
@@ -4344,33 +4269,286 @@
         ]
     },
     {
-        "id": "4800be6fcee2d101",
-        "type": "inject",
+        "id": "9d1c7dfeb98f4eba",
+        "type": "http in",
         "z": "05b90c81d8e90a14",
         "name": "",
-        "props": [
+        "url": "/api/operation",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 300,
+        "wires": [
+            [
+                "2fe09de62b785db2"
+            ]
+        ]
+    },
+    {
+        "id": "875dd790f3c8619e",
+        "type": "http response",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 490,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "8a270a53c945ce68",
+        "type": "http in",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "url": "/api/connections",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 140,
+        "wires": [
+            [
+                "2929da3915cff06a"
+            ]
+        ]
+    },
+    {
+        "id": "2929da3915cff06a",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "func": "msg.payload = [\n    { 'name': 'dev1', 'status': 'connected' },\n    { 'name': 'dev2', 'status': 'disconnected' },\n    { 'name': 'dev3', 'status': 'error' }\n];\nmsg.statusCode = 200;\nmsg.headers = undefined;\nmsg.cookies = undefined;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "875dd790f3c8619e"
+            ]
+        ]
+    },
+    {
+        "id": "ea18ccd043397733",
+        "type": "http in",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "url": "/api/status",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 220,
+        "wires": [
+            [
+                "269f9a47b48b9c09"
+            ]
+        ]
+    },
+    {
+        "id": "269f9a47b48b9c09",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "func": "msg.payload = {\n    'operation': 'discharge',\n    'voltage': [48, 53.1, 55],\n    'soc': 0.74,\n    'capacity': [18.6, 20],\n    'temperature': [40, 68, 100],\n    'ac': [3.3, 6],\n    'dc': [4.1, 6.3],\n    'pct': 0.65\n};\nmsg.statusCode = 200;\nmsg.headers = undefined;\nmsg.cookies = undefined;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 220,
+        "wires": [
+            [
+                "96f229e2b0d82d3e"
+            ]
+        ]
+    },
+    {
+        "id": "bcb8945e32584c07",
+        "type": "switch",
+        "z": "05b90c81d8e90a14",
+        "name": "Determine Operation",
+        "property": "payload.operation",
+        "propertyType": "msg",
+        "rules": [
             {
-                "p": "payload"
+                "t": "eq",
+                "v": "discharge",
+                "vt": "str"
             },
             {
-                "p": "topic",
+                "t": "eq",
+                "v": "charge",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "inactive",
                 "vt": "str"
             }
         ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 160,
-        "y": 460,
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 980,
+        "y": 300,
         "wires": [
+            [
+                "a9ed739e434c7084"
+            ],
+            [
+                "ac58a035cd0b1361"
+            ],
             [
                 "15d0b4b4ecd4a5a6"
             ]
         ]
+    },
+    {
+        "id": "cea7bf18364ed0e8",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "Check Request",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 300,
+        "wires": [
+            [
+                "f7947477c274e063"
+            ]
+        ]
+    },
+    {
+        "id": "2fe09de62b785db2",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "Check Password",
+        "func": "\nreturn msg;",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 300,
+        "wires": [
+            [
+                "cea7bf18364ed0e8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f7947477c274e063",
+        "type": "switch",
+        "z": "05b90c81d8e90a14",
+        "name": "Schedule Delay",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 760,
+        "y": 300,
+        "wires": [
+            [
+                "bcb8945e32584c07"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "38e47d2972d7779e",
+        "type": "http response",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2130,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "848acb8ecd747583",
+        "type": "function",
+        "z": "05b90c81d8e90a14",
+        "name": "Wrap Response",
+        "func": "msg.statusCode = 200;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1960,
+        "y": 300,
+        "wires": [
+            [
+                "38e47d2972d7779e"
+            ]
+        ]
+    },
+    {
+        "id": "3936edc3ec40d849",
+        "type": "catch",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 100,
+        "y": 380,
+        "wires": [
+            [
+                "be059150e0851137"
+            ]
+        ]
+    },
+    {
+        "id": "be059150e0851137",
+        "type": "subflow:c625d94296a71599",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "x": 300,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "96f229e2b0d82d3e",
+        "type": "http response",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "31c3803fb860b9f2",
+        "type": "comment",
+        "z": "05b90c81d8e90a14",
+        "name": "API Description",
+        "info": "",
+        "x": 120,
+        "y": 60,
+        "wires": []
     },
     {
         "id": "1c523af552715ba5",
