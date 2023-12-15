@@ -522,7 +522,9 @@
             "c78d10d9207b6273"
         ],
         "x": 34,
-        "y": 239
+        "y": 239,
+        "w": 1992,
+        "h": 262
     },
     {
         "id": "06e9bdefebec18b3",
@@ -542,7 +544,9 @@
             "f79824953eef4fc6"
         ],
         "x": 34,
-        "y": 59
+        "y": 59,
+        "w": 892,
+        "h": 142
     },
     {
         "id": "0bf62b5a82a31810",
@@ -5092,7 +5096,7 @@
         "type": "comment",
         "z": "05b90c81d8e90a14",
         "name": "API Description",
-        "info": "",
+        "info": "# Raspberry Pi \"Testbox\" API\n\n## **GET /api/connections**\n### Request parameters\nNone\n### Response\n- `200`: Success  \nBody: JSON array of objects with the following parameters\n  - `name`: The device name\n  - `status`: Either `'connected'`, `'disconnected'`, or `'error'`\n- `500`: Server error\n\n\n## **GET /api/status**\n### Request parameters\nNone\n### Response\n- `200`: Success  \nBody: JSON object with the following parameters\n  - `operation`: Either `'charge'`, `'discharge'`, `'inactive'`, `'fault'`, or `'standby'`\n  - `voltage`: An array with the minimum voltage, actual voltage, and maximum voltage\n  - `soc`: The \n  - `capacity`\n  - `temperature`\n  - `ac`\n  - `dc`\n  - `pct`\n\n{\n'operation': 'charge' OR 'discharge' OR 'inactive' OR 'fault' OR 'standby',\n'voltage': [MIN, ACTUAL, MAX],\n'soc': 0.74,\n'capacity': [ACTUAL, MAX],\n'temperature': [MIN, ACTUAL, MAX],\n'ac': [ACTUAL, MAX],\n'dc': [ACTUAL, MAX],\n'pct': 0.43\n}\n- `500`: Server error\n\n\n## **POST /api/operation**\n### Request body\nJSON in the following form  \n{\n    'password': 'lmao',\n  'operation': 'charge' OR 'discharge' OR 'inactive',\n  'pct': OPTIONAL OPERATION PERCENTAGE,\n  'delay': OPTIONAL OPERATION DELAY (IN SECONDS)\n}\n### Response\n- `200`: Success\n- `400`: Malformed request\n- `403`: Wrong password\n- `500`: Server error\n\n## **GET /api/data**\n### Request parameters\nNone\n### Response\n- `200`: Success\n- `500`: Server error",
         "x": 120,
         "y": 60,
         "wires": []
