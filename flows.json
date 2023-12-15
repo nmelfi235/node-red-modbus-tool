@@ -295,20 +295,68 @@
         "category": "network",
         "in": [
             {
-                "x": 50,
-                "y": 30,
-                "wires": []
+                "x": 60,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "45aaaa4ea40c6d3b"
+                    }
+                ]
             }
         ],
         "out": [],
-        "env": [],
+        "env": [
+            {
+                "name": "event",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-exclamation",
+                    "label": {
+                        "en-US": "SSE Event"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "data",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-file-text-o",
+                    "label": {
+                        "en-US": "Event Data"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "num",
+                            "bool",
+                            "json",
+                            "env"
+                        ]
+                    }
+                }
+            }
+        ],
         "meta": {},
         "color": "#DDAA99",
         "icon": "node-red/white-globe.svg",
         "status": {
-            "x": 160,
-            "y": 30,
-            "wires": []
+            "x": 260,
+            "y": 60,
+            "wires": [
+                {
+                    "id": "7ffcef4a76897296",
+                    "port": 0
+                }
+            ]
         }
     },
     {
@@ -474,9 +522,7 @@
             "c78d10d9207b6273"
         ],
         "x": 34,
-        "y": 239,
-        "w": 1992,
-        "h": 262
+        "y": 239
     },
     {
         "id": "06e9bdefebec18b3",
@@ -496,9 +542,7 @@
             "f79824953eef4fc6"
         ],
         "x": 34,
-        "y": 59,
-        "w": 892,
-        "h": 142
+        "y": 59
     },
     {
         "id": "0bf62b5a82a31810",
@@ -584,74 +628,6 @@
         "reconnectOnTimeout": true,
         "reconnectTimeout": 2000,
         "parallelUnitIdsAllowed": true
-    },
-    {
-        "id": "03db9fd492383123",
-        "type": "tls-config",
-        "name": "",
-        "cert": "",
-        "key": "",
-        "ca": "",
-        "certname": "",
-        "keyname": "",
-        "caname": "",
-        "servername": "",
-        "verifyservercert": true,
-        "alpnprotocol": ""
-    },
-    {
-        "id": "ea611cdf1bc895ae",
-        "type": "mqtt-broker",
-        "name": "",
-        "broker": "ssl://BESS-hub-Prod.azure-devices.net",
-        "port": "8883",
-        "tls": "03db9fd492383123",
-        "clientid": "ci-f-cb-0339",
-        "autoConnect": true,
-        "usetls": true,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "sessionExpiry": ""
-    },
-    {
-        "id": "ef8e78210ed98d3e",
-        "type": "mqtt-broker",
-        "name": "",
-        "broker": "ssl://BESS-hub-QA.azure-devices.net",
-        "port": "8883",
-        "tls": "03db9fd492383123",
-        "clientid": "627491-565966-575071-inverter",
-        "autoConnect": true,
-        "usetls": true,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "sessionExpiry": ""
     },
     {
         "id": "7426633e02a085fd",
@@ -1099,6 +1075,167 @@
                 "fa659ccd904d4a48"
             ]
         ]
+    },
+    {
+        "id": "45aaaa4ea40c6d3b",
+        "type": "switch",
+        "z": "60b9353837f41409",
+        "name": "Check if HTTP Request",
+        "property": "msg",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "hask",
+                "v": "res",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 230,
+        "y": 140,
+        "wires": [
+            [
+                "d070cd5d84a6c341"
+            ],
+            [
+                "32bcea22be21f563"
+            ]
+        ]
+    },
+    {
+        "id": "97e376d31f8e28b6",
+        "type": "catch",
+        "z": "60b9353837f41409",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 100,
+        "y": 280,
+        "wires": [
+            [
+                "aab4782a08713728",
+                "816acf4343e53f9e",
+                "53cb936137689734"
+            ]
+        ]
+    },
+    {
+        "id": "d070cd5d84a6c341",
+        "type": "function",
+        "z": "60b9353837f41409",
+        "name": "Register Subscriber",
+        "func": "\n// Get ready for connection closing\nconst callback = () => {\n\n    if (msg.res._res.finished) {\n        node.error(\"how was this possible\");\n        return;\n    }\n\n    node.log(`Client disconnected: ${msg._msgid}`);\n    msg.res._res.write('event: close\\n');\n    msg.res._res.write(`data: The connection was closed by the server.\\n`);\n    msg.res._res.write(`id: ${msg._msgid}\\n\\n`);\n    msg.res._res.end();\n\n    flow.set('subscribers', flow.get('subscribers').filter(sub => {\n        return sub.id !== msg._msgid;\n    }));\n\n    flow.get('updateStatus')('success');\n};\nlet test = msg.res._res.req.once('close', callback);\n\n// Track subscribers\nlet old = flow.get('subscribers');\nold.push({\n    id: msg._msgid,\n    socket: msg.res,\n    callback: callback\n});\nflow.set('subscribers', old);\n\n// Update status\nflow.get('updateStatus')('success');\n\n// HTTP response for SSE\n// Using an HTTP response node won't work\n// As it closes the connection seemingly\nmsg.res._res.writeHead(200, {\n    'Content-Type': 'text/event-stream',\n    'Cache-Control': 'no-cache',\n    Connection: 'keep-alive',\n});\nmsg.res._res.write(\n    'event: open\\n' +\n    `data: ${JSON.stringify(msg.payload || 'Connection opened')}\\n` +\n    `id: ${msg._msgid}\\n\\n`\n);\n\nnode.log(`Client connected: ${msg._msgid}`);",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\nflow.set('subscribers', []);",
+        "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\n\n// Close all connections on re-deploy\nlet subs = flow.get('subscribers');\nfor (let i = 0; i < subs.length; i++) {\n\n    let sub = subs[i];\n    node.warn(`Forced client disconnect: ${sub.id}`);\n\n    sub.socket._res.req.removeListener('close', sub.callback);\n    sub.socket._res.write('event: close\\n');\n    sub.socket._res.write(`data: The connection was closed by the server.\\n`);\n    sub.socket._res.write(`id: ${sub.id}\\n\\n`);\n    sub.socket._res.end();\n\n}",
+        "libs": [],
+        "x": 470,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "53cb936137689734",
+        "type": "function",
+        "z": "60b9353837f41409",
+        "name": "Update Status",
+        "func": "\nflow.get('updateStatus')('fail');\nreturn msg;",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "6b20285b086be858",
+        "type": "http response",
+        "z": "60b9353837f41409",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 520,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "7ffcef4a76897296",
+        "type": "function",
+        "z": "60b9353837f41409",
+        "name": "Update Status",
+        "func": "",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\nflow.set('updateStatus', (type) => {\n    node.send({\n        status: {\n            fill: type === \"success\" ? 'green' : 'red',\n            shape: 'dot',\n            text: `${flow.get(\"subscribers\").length} client(s) connected`\n        }\n    });\n});",
+        "finalize": "",
+        "libs": [],
+        "x": 120,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aab4782a08713728",
+        "type": "function",
+        "z": "60b9353837f41409",
+        "name": "Log Error",
+        "func": "\nnode.error(\"sse error\", msg.error);",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "816acf4343e53f9e",
+        "type": "switch",
+        "z": "60b9353837f41409",
+        "name": "Check if HTTP Request",
+        "property": "msg",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "hask",
+                "v": "res",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 310,
+        "y": 280,
+        "wires": [
+            [
+                "6b20285b086be858"
+            ]
+        ]
+    },
+    {
+        "id": "32bcea22be21f563",
+        "type": "function",
+        "z": "60b9353837f41409",
+        "name": "Write Data",
+        "func": "const event = `${env.get('event') || 'message'}`;\nconst data = `${JSON.stringify(env.get('data') || msg.payload)}`;\n\nnode.log(`Sending ${event} to ${flow.get('subscribers').length} subs`);\n\nflow.get('subscribers').forEach((sub) => {\n    sub.socket._res.write(`event: ${event}\\n`);\n    sub.socket._res.write(`data: ${data}\\n`);\n    sub.socket._res.write(`id: ${msg._msgid}\\n\\n`);\n});",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 200,
+        "wires": []
     },
     {
         "id": "19c730a6eabb37ef",
@@ -4534,8 +4671,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 210,
-        "y": 140,
+        "x": 130,
+        "y": 60,
         "wires": [
             [
                 "9da9c475ca294313"
@@ -4553,8 +4690,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 140,
+        "x": 320,
+        "y": 60,
         "wires": [
             [
                 "1122500b80d983de"
@@ -4568,8 +4705,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 550,
-        "y": 140,
+        "x": 470,
+        "y": 60,
         "wires": []
     },
     {
@@ -4586,7 +4723,7 @@
         "delayOnStart": false,
         "startDelayTime": "",
         "x": 1580,
-        "y": 300,
+        "y": 380,
         "wires": [
             [],
             [
@@ -4606,7 +4743,7 @@
         "stream": false,
         "addname": "",
         "x": 1390,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "7589dfcff1387d67"
@@ -4625,7 +4762,7 @@
         "finalize": "",
         "libs": [],
         "x": 1200,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "d48c02c6892c62f0"
@@ -4653,7 +4790,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 1770,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "848acb8ecd747583"
@@ -4672,7 +4809,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 360,
+        "y": 440,
         "wires": [
             [
                 "d48c02c6892c62f0"
@@ -4691,7 +4828,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 420,
+        "y": 500,
         "wires": [
             [
                 "d48c02c6892c62f0"
@@ -4708,7 +4845,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 130,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "168e27817342d651"
@@ -4723,7 +4860,7 @@
         "statusCode": "",
         "headers": {},
         "x": 490,
-        "y": 140,
+        "y": 220,
         "wires": []
     },
     {
@@ -4736,7 +4873,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 140,
+        "y": 220,
         "wires": [
             [
                 "2929da3915cff06a"
@@ -4755,7 +4892,7 @@
         "finalize": "",
         "libs": [],
         "x": 340,
-        "y": 140,
+        "y": 220,
         "wires": [
             [
                 "875dd790f3c8619e"
@@ -4772,7 +4909,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 120,
-        "y": 220,
+        "y": 300,
         "wires": [
             [
                 "269f9a47b48b9c09"
@@ -4791,7 +4928,7 @@
         "finalize": "",
         "libs": [],
         "x": 300,
-        "y": 220,
+        "y": 300,
         "wires": [
             [
                 "96f229e2b0d82d3e"
@@ -4826,7 +4963,7 @@
         "repair": false,
         "outputs": 3,
         "x": 980,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "a9ed739e434c7084"
@@ -4851,7 +4988,7 @@
         "finalize": "",
         "libs": [],
         "x": 560,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "f7947477c274e063"
@@ -4877,7 +5014,7 @@
         "repair": false,
         "outputs": 2,
         "x": 760,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "bcb8945e32584c07"
@@ -4893,7 +5030,7 @@
         "statusCode": "",
         "headers": {},
         "x": 2130,
-        "y": 300,
+        "y": 380,
         "wires": []
     },
     {
@@ -4908,7 +5045,7 @@
         "finalize": "",
         "libs": [],
         "x": 1960,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "38e47d2972d7779e"
@@ -4923,7 +5060,7 @@
         "scope": null,
         "uncaught": false,
         "x": 100,
-        "y": 380,
+        "y": 140,
         "wires": [
             [
                 "be059150e0851137"
@@ -4936,7 +5073,7 @@
         "z": "05b90c81d8e90a14",
         "name": "",
         "x": 300,
-        "y": 380,
+        "y": 140,
         "wires": []
     },
     {
@@ -4947,7 +5084,7 @@
         "statusCode": "",
         "headers": {},
         "x": 450,
-        "y": 220,
+        "y": 300,
         "wires": []
     },
     {
@@ -4979,13 +5116,115 @@
         "repair": false,
         "outputs": 2,
         "x": 350,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "cea7bf18364ed0e8"
             ],
             []
         ]
+    },
+    {
+        "id": "8da89b63c0e385b0",
+        "type": "http in",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "url": "/api/data",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 540,
+        "wires": [
+            [
+                "c9547452372cf41c"
+            ]
+        ]
+    },
+    {
+        "id": "c9547452372cf41c",
+        "type": "subflow:60b9353837f41409",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "x": 330,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "31b1248996a0d606",
+        "type": "inject",
+        "z": "05b90c81d8e90a14",
+        "name": "Send message",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 600,
+        "wires": [
+            [
+                "c9547452372cf41c"
+            ]
+        ]
+    },
+    {
+        "id": "29aa4af90d6b4d9e",
+        "type": "http in",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "url": "/api/testsse",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 460,
+        "wires": [
+            [
+                "0e15da506d76b993"
+            ]
+        ]
+    },
+    {
+        "id": "0e15da506d76b993",
+        "type": "template",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<html>\n\n<head>\n    <script>\n\n        addEventListener(\"load\", (event) => {\n\n            if (typeof(EventSource) === \"undefined\") {\n                document.innerHTML = \"<h1>Server-sent events not supported!</h1>\";\n                return;\n            }\n\n            window.urlInput = document.getElementById(\"url\");\n            window.connectButton = document.getElementById(\"connect\");\n            window.disconnectButton = document.getElementById(\"disconnect\");\n            window.clearButton = document.getElementById(\"clear\");\n            window.eventList = document.getElementById(\"list\");\n            window.lastState = -1;\n\n            connectButton.onclick = () => connectSSE(urlInput.value);\n            disconnectButton.onclick = disconnectSSE;\n            clearButton.onclick = clearText;\n        });\n\n\n        function connectSSE (url) {\n            window.evtSource = new EventSource(url, {withCredentials: false,});\n            updateState();\n\n            window.stateInterval = setInterval(updateState, 1000);\n\n            evtSource.onmessage = onMessage;\n            evtSource.addEventListener('close', onClose);\n        }\n\n        function disconnectSSE () {\n            clearInterval(stateInterval);\n            evtSource.close();\n            evtSource.onmessage = undefined;\n            evtSource.removeEventListener('close', onClose);\n            evtSource = undefined;\n            onClose();\n            updateState();\n        }\n\n        function updateState () {\n            urlInput.disabled = Boolean(evtSource);\n            connect.disabled = Boolean(evtSource);\n            disconnect.disabled = !Boolean(evtSource);\n\n            if (!evtSource || evtSource.readyState === lastState) return;\n            lastState = evtSource.readyState;\n            \n            switch (lastState) {\n                case EventSource.CONNECTING:\n                    listText(\"CONNECTING\");\n                    break;\n                case EventSource.OPEN:\n                    listText(\"OPEN\");\n                    break;\n                case EventSource.CLOSED:\n                    listText(\"CLOSED\");\n                    break;\n            }\n        }\n\n        function onMessage (evt) {\n            listText(`message: ${event.data}`);\n        }\n\n        function onClose (evt) {\n            listText(\"CLOSED\");\n            window.lastState = EventSource.CLOSED;\n        }\n\n        function listText (txt) {\n            const newElement = document.createElement(\"li\");\n            newElement.textContent = txt;\n            eventList.appendChild(newElement);\n            clearButton.disabled = false;\n        }\n\n        function clearText () {\n            eventList.innerHTML = \"\";\n            clearButton.disabled = true;\n        }\n\n    </script>\n</head>\n\n<body>\n    <label for=\"url\">SSE URL:</label>\n    <input type=\"text\" id=\"url\" value=\"/api/data\">\n    <button id=\"connect\">Connect</button>\n    <button id=\"disconnect\" disabled>Disconnect</button>\n    <button id=\"clear\" disabled>Clear</button>\n    <ul id=\"list\"></ul>\n</body>\n\n</html>",
+        "output": "str",
+        "x": 300,
+        "y": 460,
+        "wires": [
+            [
+                "13b3ee0cd2e84e8a"
+            ]
+        ]
+    },
+    {
+        "id": "13b3ee0cd2e84e8a",
+        "type": "http response",
+        "z": "05b90c81d8e90a14",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 450,
+        "y": 460,
+        "wires": []
     },
     {
         "id": "1c523af552715ba5",
